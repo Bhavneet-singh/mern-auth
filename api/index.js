@@ -5,6 +5,7 @@ import path from "path";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 dotenv.config({ path: path.resolve("../.env") });
+import cors from 'cors';
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_DB_URL)
@@ -17,6 +18,7 @@ mongoose
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.listen(3000, () => {
