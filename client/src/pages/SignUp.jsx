@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -14,7 +15,7 @@ function SignUp() {
 
     try {
       setLoading(true);
-      setError(true);
+      setError(false);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -28,11 +29,12 @@ function SignUp() {
 
       setLoading(false);
 
-      if (!data.success ) {
+      if (!data && !data._id) {
         setError(true);
         return;
       }
-      setError(false) ; 
+      navigate("/");
+      setError(false);
     } catch (error) {
       setLoading(false);
     }
@@ -76,7 +78,9 @@ function SignUp() {
           Sign in
         </Link>
       </div>
-      <p className="text-red-700 mt-5 ">{error && "Something went wrong!"}</p>
+      <p className="text-red-700 mt-5 ">
+        {error ? "Something went wrong!" : null}
+      </p>
     </div>
   );
 }
